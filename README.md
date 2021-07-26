@@ -13,19 +13,23 @@ cd api_final_yatube
 ```
 Cоздать и активировать виртуальное окружение:
 ```
-python -m venv env
+python -m venv venv
 ```
 ###### *на **Winows** часто вместо 'python' просто 'python3'
 ```
-source env/bin/activate или source venv/Scripts/activate (на Windows)
+source env/bin/activate  (на Windows: source venv/Scripts/activate)
 ```
-Установить зависимости из файла requirements.txt:
+Обновить pip и установить зависимости из файла requirements.txt:
 ```
 python -m pip install --upgrade pip
 ```
 
 ```
 pip install -r requirements.txt
+```
+Перейти в корневую папку проекта (с файлом manage.py): 
+```
+cd yatube_api
 ```
 Выполнить миграции:
 ```
