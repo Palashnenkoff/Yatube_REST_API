@@ -9,19 +9,19 @@
 git clone https://github.com/Palashnenkoff/api_final_yatube
 ```
 ```
-cd kittygram
+cd api_final_yatube
 ```
 Cоздать и активировать виртуальное окружение:
 ```
-python3 -m venv env
+python -m venv env
 ```
-###### *на **Winows** часто вместо 'python3' просто 'python'
+###### *на **Winows** часто вместо 'python' просто 'python3'
 ```
 source env/bin/activate или source venv/Scripts/activate (на Windows)
 ```
 Установить зависимости из файла requirements.txt:
 ```
-python3 -m pip install --upgrade pip
+python -m pip install --upgrade pip
 ```
 
 ```
@@ -29,13 +29,13 @@ pip install -r requirements.txt
 ```
 Выполнить миграции:
 ```
-python3 manage.py migrate
+python manage.py migrate
 ```
 
 Запустить проект:
 
 ```
-python3 manage.py runserver
+python manage.py runserver
 ```
 
 ### Примеры запросов:
