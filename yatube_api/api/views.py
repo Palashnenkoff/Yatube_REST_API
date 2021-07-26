@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions, filters, mixins
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import LimitOffsetPagination
 from django.shortcuts import get_object_or_404
@@ -63,7 +63,15 @@ class CommentViewSet(viewsets.ModelViewSet):
         instance.delete()
 
 
-class FollowViewSet(viewsets.ModelViewSet):
+class CreateRetrieveListViewSet(
+        mixins.CreateModelMixin,
+        mixins.RetrieveModelMixin,
+        mixins.ListModelMixin,
+        viewsets.GenericViewSet):
+    pass
+
+
+class FollowViewSet(CreateRetrieveListViewSet):
     serializer_class = FollowSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=following__username',)
@@ -73,5 +81,4 @@ class FollowViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.request.user)
-        new_queryset = Follow.objects.filter(user=user)
-        return new_queryset
+        return Follow.objects.filter(user=user)
