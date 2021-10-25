@@ -12,8 +12,7 @@
 Клонировать репозиторий и перейти в него в командной строке:
 ```
 git clone https://github.com/Palashnenkoff/Yatube_REST_API.git
-```
-```
+
 cd Yatube_REST_API
 ```
 Cоздать и активировать виртуальное окружение (для Windows):
@@ -28,15 +27,13 @@ source venv/Scripts/activate
 Обновить pip и установить зависимости:
 ```
 python -m pip install --upgrade pip
-```
-```
+
 pip install -r requirements.txt
 ```
 Зайти в директорию приложения и выполнить миграции:
 ```
 cd yatube_api
-```
-```
+
 python manage.py migrate
 ```
 Запустить проект:
