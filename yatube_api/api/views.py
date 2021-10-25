@@ -1,4 +1,5 @@
-from rest_framework import viewsets, permissions, filters, mixins
+from rest_framework import viewsets, permissions, filters, mixins, status
+from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import LimitOffsetPagination
 from django.shortcuts import get_object_or_404
@@ -52,6 +53,11 @@ class CommentViewSet(viewsets.ModelViewSet):
         post = get_object_or_404(Post, id=post_id)
         serializer.save(author=self.request.user, post=post)
 
+    # а можно короче так как для модели коммент нужен только id:
+    # def perform_create(self, serializer):
+    #     post_id = self.kwargs.get('post_id')
+    #     serializer.save(author=self.request.user, post_id=post_id)
+
     def perform_update(self, serializer):
         if serializer.instance.author != self.request.user:
             raise PermissionDenied('Изменение чужого комментария запрещено!')
@@ -82,3 +88,37 @@ class FollowViewSet(CreateRetrieveListViewSet):
     def get_queryset(self):
         user = get_object_or_404(User, username=self.request.user)
         return Follow.objects.filter(user=user)
+
+# ЭТО Я ИЗВРАЩАЛСЯ В НАЧАЛАЕ ЧЕРЕЗ ViewSet
+# class FollowViewSet(viewsets.ViewSet): 
+#     filter_backends = (filters.SearchFilter,)
+#     search_fields = ('=following__username',)
+
+#     def list(self, request):
+#         queryset = Follow.objects.filter(user=self.request.user)
+#         serializer = FollowSerializer(queryset, many=True)
+#         return Response(serializer.data)
+
+#     def create(self, request):
+#         serializer = FollowSerializer(data=request.data)
+#         user = self.request.user
+#         follow_obj = serializer.initial_data.get('following')
+#         if user.username == follow_obj:
+#             raise PermissionDenied('Невозможно подписаться на самого себя')
+#         elif Follow.objects.filter(
+#             user=user,
+#             following__username=follow_obj # или как на след строке
+#             # following=User.objects.get(username=follow_obj) или так, но так ругается почему-то pytest, хотя работает
+#         ).exists():
+#             raise PermissionDenied('Вы уже подписаны')
+#         elif serializer.is_valid():
+#             serializer.save(user=user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     # def destroy(self, request, pk=None): САМ НАПИСАЛ РАДИ ФАНА, НО КОРЯВО, ТАК КАК УДАЛЯЕТ ПО following, НА ПО PK
+#     #     serializer = FollowSerializer(data=request.data)
+#     #     follow_obj = serializer.initial_data.get('following')
+#     #     queryset = Follow.objects.filter(user=self.request.user, following__username=follow_obj)
+#     #     queryset.delete()
+#     #     return Response(status=status.HTTP_201_CREATED)
